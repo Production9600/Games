@@ -1,0 +1,65 @@
+#!/bin/bash
+
+RED='\e[1;31m'
+YELLOW='\e[1;33m'
+WHITE='e[1;97m'
+GREEN='\e[1;92m'
+RESET='\e[0m'
+
+URL=http://world-of-odroid.de/wp-content/uploads/games/
+FILE=(CnC.zip)
+CDIR="$HOME/RetroPie/roms/dos"
+GLPATH="$HOME/RetroPie/roms/dos"
+GLXML="gamelist.xml"
+
+exists_check() {
+  if [ -e "${IDIR}/${FILE[0]}" ]; then
+    rm -rf ${IDIR}/${FILE[0]} ${IDIR}/${DICN}/${FILE[2]}
+        copydata
+    if grep -ri "${FILE[0]}" ${GLPATH}/${GLXML} 2>/dev/null 1>&2; then
+      printf "\n${RED}Spiel bereits in der gamelist eingetragen!${RESET}\n\n"
+      sleep 2
+      exit 0
+    else
+      gamelist
+    fi
+  else
+    copydata
+  fi
+}
+
+
+copydata() {
+clear
+  printf "${WHITE}================================================="
+  printf "= Command and Conquer Teil 1: Tiberium Konflikt ="
+  printf "================================================= &{RESET}\n"
+  sleep 1
+  printf "\n Willkommen im Command and Conquer Teil 1 - Downloader. Das Spiel wurde im Jahr 2016 als Freeware"
+  printf "freigegeben und kann somit frei heruntergeladen werden.\n"
+  sleep 1
+  printf "$RED        !!Dieses Paket ist only RETROPIE!! $RESET \n"
+  printf "\n Spiel ist Copyright (C) by Westwood Studios\n"
+  sleep 1
+  printf "\n beginne Download...\n"
+  if [ -d "$HOME/RetroPie/roms/dos/cnc.zip ]; then
+      printf "\n${RED}>>${RESET} Download wird Abgebrochen. Bereits heruntergeladen... \n"
+      sleep 1
+      exit 0
+  fi
+  cd {GLPATH}
+  wget ${URL}/{FILE[0]}
+  printf "\nDownload Datei ${WHITE}${FILE[0]} [ ${GREEN}ERFOLGREICH${RESET} ]"
+  unzip ${FILE[0]}
+  fi
+}
+
+
+if [ `whoami` = "root" ]; then
+  clear
+  printf "\n${YELLOW}>>${RESET} ${RED}ACHTUNG${RESET}: DIESES SCRIPT BENÖTIGT KEINE ROOT RECHTE!!\n\n"
+  echo -en "Beende in " && for i in {5..1}; do echo -en "$i.. "; sleep 1; done; echo -e "\n"
+  exit 1
+fi
+
+exists_check
